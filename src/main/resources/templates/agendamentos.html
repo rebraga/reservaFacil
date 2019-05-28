@@ -1,0 +1,109 @@
+<html>
+
+
+
+
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<title>Agendamento de transferências financeiras</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"></link>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+
+	<div class="panel panel-default">
+	
+		<div th:if="${error != null}">
+			<div class="alert alert-danger alert-dismissible" >
+				<span th:text="${error}"></span>			
+			</div>	
+		</div>
+	
+		<div class="panel-heading">
+			<strong>Agendamentos</strong>
+		</div>
+		
+		<div class="panel-body" th:unless="${#lists.isEmpty(agendamentos)}">
+			<div class="table-responsive">
+				<table class="table table-sm table-striped table-hover table-bordered">
+					<thead>
+						<tr>
+							<th>Conta Origem</th>
+							<th>Conta Destino</th>
+							<th>Valor</th>
+							<th>Taxa</th>
+							<th>Data Transferencia</th>
+							<th>Data Agendamento</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="agendamento : ${agendamentos}">
+							<td th:text="${agendamento.contaOrigem}"></td>
+							<td th:text="${agendamento.contaDestino}"></td>
+							<td th:text="${#numbers.formatDecimal(agendamento.valor, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
+							<td th:text="${#numbers.formatDecimal(agendamento.taxa, 1, 'DEFAULT', 2, 'DEFAULT')}"></td>
+							<td th:text="${agendamento.dataTransferencia}"></td>
+							<td th:text="${agendamento.dataAgendamento}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div class="panel-body" th:if="${#lists.isEmpty(agendamentos)}">
+			<p>Nenhum agendamento cadastrado.</p>
+		</div>	
+		
+	</div>
+
+
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<strong>Realizar transferencia:</strong>
+		</div>
+		<div class="panel-body">
+			<form class="form-horizontal"  th:object="${post}" th:action="@{/transferir}" method="POST" style="margin: 10px">
+				<div class="form-group">
+ 					<fieldset>
+				
+						<div class="form-group row">                                                          
+							<div class="col-md-4" >
+							    <label>Conta Origem</label>
+							    <input type="text" class="form-control input-sm" name="contaOrigem" placeholder="Informe a conta de origem" maxlength="20"/>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-4" >
+								<label>Conta Destino</label> 
+								<input type="text" class="form-control input-sm" name="contaDestino" maxlength="20" placeholder="Informe a conta de destino"/>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-4" >
+								<label>Valor</label>
+								<input type="text" class="form-control input-sm" name="valor" maxlength="20" placeholder="Informe o valor"/>
+							</div>
+						</div>							
+						<div class="form-group row">
+							<div class="col-md-2" >
+								<label>Data Transferencia</label> 
+								<input type="date" class="form-control input-sm" name="dataTransferencia"/>
+							</div>
+						</div>												
+					</fieldset>
+				</div>
+				<div class="form-group row">
+					<button type="submit" class="btn btn-sm btn-primary">Transferir</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>
